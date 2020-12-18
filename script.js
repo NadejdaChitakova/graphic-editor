@@ -1,45 +1,61 @@
 let arrOfClickedPoints = [];
+let canvasElement, ctx, endXPoint, endYPoint, width, height, startX, startY;
+let startPoint = undefined;
+let endPoint = undefined;
+let mouseClicked = false;
+let figures = [];
 
-function drawRectangle() {
-  let canvasElement = document.getElementById("canvasElement");
-  if (canvasElement.getContext) {
-    var ctx = canvasElement.getContext("2d");
+function onInit() {
+  canvasElement = document.getElementById("canvasElement");
+  ctx = canvasElement.getContext("2d");
 
-    ctx.beginPath();
-    ctx.moveTo(75, 50);
-    ctx.lineTo(100, 75);
-    ctx.lineTo(100, 25);
-    ctx.fill();
-  }
+  //addEventListeners();
 }
 
-function drawYrRectangle() {
-  if (canvasElement.getContext) {
-    var ctx = canvasElement.getContext("2d");
+function addEventListeners() {
+  canvasElement.addEventListener("click", getCurrentCursonPossition);
 
-    let firstPointOfArr = arrOfClickedPoints[0];
-    let xTopPoint = firstPointOfArr[0];
-    let yTopPoint = firstPointOfArr[1];
+  canvasElement.addEventListener("mousedown", (event) => {
+    this.mouseClicked = true;
+    startPoint = new Point(event.offsetX, event.offsetY);
+  });
+  canvasElement.addEventListener("mouseup", (event) => {
+    this.mouseClicked = false;
+    endPoint = new Point(event.offsetX, event.offsetY);
+    figures.push(new Rectangle(startPoint, endPoint));
 
-    let secondPointOfArr = arrOfClickedPoints[1];
-    let xSecPoint = secondPointOfArr[0];
-    let ySectPoint = secondPointOfArr[1];
-
-    ctx.beginPath();
-    ctx.moveTo(xTopPoint, yTopPoint);
-    ctx.lineTo(xSecPoint, ySectPoint);
-    ctx.lineTo(25, 105);
-    ctx.fill();
-  }
+    draw();
+  });
+  //canvasElement.addEventListener("mousemove", onMouseMove);
 }
 
 function onMouseMove(event) {
-  let XYpoints = {
-    xPossition: event.clientX,
-    yPossition: event.clientY,
-  };
-  if (event) {
-    console.log(Object.values(XYpoints));
-  }
-  return arrOfClickedPoints.push(Object.values(XYpoints));
+  if (mouseClicked === false) return;
+
+  endXPoint = event.pageX - canvasElement.offsetLeft;
+  endYPoint = event.pageY - canvasElement.offsetTop;
+
+  // drawRectangle();
+}
+// function getStartPoints() {
+//   console.log(arrOfClickedPoints[0].x);
+//   startX = arrOfClickedPoints[0].x;
+//   startY = arrOfClickedPoints[0].y;
+// }
+
+function draw() {
+  clearCanvas();
+
+  figures.forEach((figure) => {
+    figure.draw(ctx);
+  });
+}
+
+function clearCanvas() {
+  ctx.clearRect(0, 0, ctx.width, ctx.height);
+}
+
+function getCurrentCursonPossition(event) {
+  // let clickedPoint = new Point(event.clientX, event.clientY);
+  // arrOfClickedPoints.push(clickedPoint);
 }
