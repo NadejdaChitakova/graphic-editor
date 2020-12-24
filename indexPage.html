@@ -15,6 +15,14 @@
       type="text/javascript"
       src="C:\Users\Nadejda\Desktop\CanvasProject\figures\Rectangle.js"
     ></script>
+    <script
+      type="text/javascript"
+      src="C:\Users\Nadejda\Desktop\CanvasProject\figures\Triangle.js"
+    ></script>
+    <script
+      type="text/javascript"
+      src="C:\Users\Nadejda\Desktop\CanvasProject\figures\Circle.js"
+    ></script>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <!-- Bootstrap CSS -->
@@ -34,13 +42,20 @@
       >hi</canvas
     >
 
-    <button onclick="addEventListeners()">Rectangle</button>
+    <button id="rectangle" onclick="buttonState(this.id)">Rectangle</button>
 
-    <button onclick="drawTriangle();">Тriangle</button>
+    <button id="triangle" onclick="buttonState(this.id)">Тriangle</button>
 
-    <button onclick="drawCircle()">Circle</button>
+    <button onclick="addEventListeners(3);">Circle</button>
 
     <button onclick="drawStar()">Star</button>
+    <input
+      type="color"
+      id="colorPicker"
+      name="head"
+      onclick="getColorValue()"
+    />
+    <button id="clear" onclick="buttonState(this.id)">Clear Canvas</button>
 
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"

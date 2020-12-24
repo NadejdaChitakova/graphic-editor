@@ -7,7 +7,6 @@ class Rectangle extends Figure {
     height = this.getHeight();
   }
   draw(ctx) {
-    console.log(this);
     ctx.beginPath();
     ctx.strokeRect(
       this.startPoint.x,
@@ -20,11 +19,22 @@ class Rectangle extends Figure {
     ctx.closePath();
   }
 
+  pointInFigure(Point) {
+    if (
+      this.startPoint.x < Point.x &&
+      Point.x < this.endPoint.x &&
+      this.startPoint.y < Point.y &&
+      Point.y < this.endPoint.y
+    ) {
+      return true;
+    }
+    return false;
+  }
+
   ///////////////////////////////////
 
   getWidth() {
     var result = this.endPoint.x - this.startPoint.x;
-    console.log(result);
     return result;
   }
   getHeight() {
