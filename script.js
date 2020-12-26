@@ -5,6 +5,7 @@ let mouseClicked = false;
 let mouseClickPosition = undefined;
 let figures = [];
 let color;
+let currFig = undefined;
 
 const CANVAS_STATE = {
   NONE: "NONE",
@@ -64,7 +65,18 @@ function addEventListeners() {
     endPoint = new Point(event.offsetX, event.offsetY);
     //selectCurrentFigure(num);
     //buttonState(id);
-    pushFigureOnArr();
+    // pushFigureOnArr();
+    switch (currentButtonState) {
+      case "RECTANGLE":
+        console.log(currentButtonState);
+        currFig = new Rectangle(startPoint, endPoint);
+        break;
+      case "TRIANGLE":
+        console.log(currentButtonState);
+        currFig = new Triangle(startPoint, endPoint);
+        break;
+    }
+
     draw();
   });
 }
@@ -117,10 +129,10 @@ function selectCurrentFigure(params) {
 
 function draw() {
   clearCanvas();
-
-  figures.forEach((figure) => {
-    figure.draw(ctx);
-  });
+  currFig.draw(ctx)
+  // figures.forEach((figure) => {
+  //   figure.draw(ctx);
+  // });
 }
 
 function clearCanvas() {
