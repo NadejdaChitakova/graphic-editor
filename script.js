@@ -19,26 +19,32 @@ let currentButtonState = CANVAS_STATE.NONE;
 function checkInsidePoint() {
   console.log(figures);
   figures.forEach((figure) =>
-    console.log(figure.pointInFigure(mouseClickPosition))
+    console.log(figure.pointInFigure(mouseClickPosition));
+    if(figure.pointInFigure(mouseClickPosition) === true){
+
+    }
   );
 }
 
 function getColor() {
-  console.log("clicked!!");
-  color = getColorValue();
   getMousePosition();
   checkInsidePoint();
 }
 
 function getColorValue() {
   let colorPicker = document.getElementById("colorPicker");
-  //colorPicker.addEventListener("input", updateFirst, false);
+  colorPicker.addEventListener("input", updateFirst, false);
   colorPicker.addEventListener("change", updateColor, false);
+  //canvasElement.addEventListener("click", checkInsidePoint, false);
 }
 
-function updateColor(event) {
+function updateFirst(event) {
   //get new color value
   color = event.target.value;
+}
+function updateColor(event) {
+  color = event.target.value;
+  console.log(color);
 }
 
 function onInit() {
@@ -55,6 +61,7 @@ function getMousePosition() {
   });
 }
 function addEventListeners() {
+  canvasElement.addEventListener("click", checkInsidePoint, false);
   canvasElement.addEventListener("mousedown", (event) => {
     this.mouseClicked = true;
     startPoint = new Point(event.offsetX, event.offsetY);
@@ -62,15 +69,12 @@ function addEventListeners() {
   canvasElement.addEventListener("mouseup", (event) => {
     this.mouseClicked = false;
     endPoint = new Point(event.offsetX, event.offsetY);
-    //selectCurrentFigure(num);
-    //buttonState(id);
     pushFigureOnArr();
     draw();
   });
 }
 
-function buttonState(id) {
-  console.log(id);
+function changeState(id) {
   switch (id) {
     case "rectangle":
       currentButtonState = CANVAS_STATE.RECTANGLE;
@@ -87,30 +91,12 @@ function buttonState(id) {
   }
 }
 function pushFigureOnArr() {
-  console.log(currentButtonState + "1");
   switch (currentButtonState) {
     case "RECTANGLE":
-      console.log(currentButtonState + "2");
       figures.push(new Rectangle(startPoint, endPoint));
       break;
     case "TRIANGLE":
-      console.log(currentButtonState + "3");
       figures.push(new Triangle(startPoint, endPoint));
-      break;
-  }
-}
-function selectCurrentFigure(params) {
-  switch (params) {
-    case 1:
-      if (rectangleButtonClicked === true) {
-        figures.push(new Rectangle(startPoint, endPoint));
-      }
-      break;
-    case 2:
-      figures.push(new Triangle(startPoint, endPoint));
-      break;
-    case 3:
-      figures.push(new Circle(startPoint, endPoint));
       break;
   }
 }
