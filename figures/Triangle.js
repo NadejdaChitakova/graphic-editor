@@ -12,7 +12,11 @@ class Triangle extends Figure {
     ctx.stroke();
     ctx.closePath();
   }
+  colorSetter(newColor) {
+    this.color = newColor;
+  }
   pointInFigure() {}
+
   //////////////////////ne raboti
   getInstablePointX() {
     return this.startPoint.x * 2;
