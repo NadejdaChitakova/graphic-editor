@@ -5,10 +5,10 @@ class Triangle extends Figure {
   draw(ctx) {
     console.log(this);
     ctx.beginPath();
-    ctx.moveTo(startPoint.x, startPoint.y); //work
-    ctx.lineTo(endPoint.x, endPoint.y); // една черта на ляво
-    ctx.lineTo(startPoint.x / 2, endPoint.y);
-    ctx.lineTo(startPoint.x, startPoint.y);
+    ctx.moveTo(this.startPoint.x, this.startPoint.y);
+    ctx.lineTo(this.endPoint.x, this.endPoint.y);
+    ctx.lineTo(this.startPoint.x / 2, this.endPoint.y);
+    ctx.lineTo(this.startPoint.x, this.startPoint.y);
     ctx.stroke();
     ctx.closePath();
   }
@@ -16,12 +16,4 @@ class Triangle extends Figure {
     this.color = newColor;
   }
   pointInFigure() {}
-
-  //////////////////////ne raboti
-  getInstablePointX() {
-    return this.startPoint.x * 2;
-  }
-  getInstablePointY() {
-    return this.endPoint.y - this.startPoint.y;
-  }
 }

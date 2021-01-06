@@ -1,4 +1,4 @@
-let canvasElement, ctx; //, width, height;
+let canvasElement, ctx;
 let startPoint = undefined;
 let endPoint = undefined;
 let mouseClicked = false;
@@ -48,15 +48,13 @@ function setButtonState(id) {
   }
 }
 
-function addFiguresOnArr() {
+function createFigure() {
   switch (currentButtonState) {
     case "RECTANGLE":
       currentFigure = new Rectangle(startPoint, endPoint);
-      figures.push(currentFigure);
       break;
     case "TRIANGLE":
       currentFigure = new Triangle(startPoint, endPoint);
-      figures.push(currentFigure);
       break;
   }
 }
@@ -70,8 +68,6 @@ function addEventListeners() {
   canvasElement.addEventListener("mouseup", mouseUp);
 
   canvasElement.addEventListener("mousemove", mouseMove);
-
-  canvasElement.addEventListener("click", click);
 }
 
 ////////////////////////////////////////////
@@ -79,15 +75,21 @@ function addEventListeners() {
 function mouseDown(event) {
   mouseClicked = true;
   startPoint = new Point(event.offsetX, event.offsetY);
+  mouseClickPosition = new Point(event.offsetX, event.offsetY);
+  if (color && mouseClickPosition) {
+    checkInsidePoint();
+  }
 }
 
 function mouseMove(event) {
-  console.log(mouseClicked);
   if (mouseClicked === true) {
     endPoint = new Point(event.offsetX, event.offsetY);
     clearContex();
-    addFiguresOnArr();
-    if (figures != 0) {
+    if (figures.length > 0) {
+      redrawsFigures();
+    }
+    createFigure();
+    if (currentFigure != undefined) {
       draw();
     }
   }
@@ -96,24 +98,23 @@ function mouseMove(event) {
 function mouseUp(event) {
   mouseClicked = false;
   endPoint = new Point(event.offsetX, event.offsetY);
+  if (currentFigure != undefined) {
+    figures.push(currentFigure);
+  }
+  console.log(figures);
 }
 
-function click(event) {
-  mouseClickPosition = new Point(event.offsetX, event.offsetY);
-  if (color && mouseClickPosition) {
-    checkInsidePoint();
-  }
-}
 ////////////////////////////////////////////
 
 function getColorValue() {
   let colorPicker = document.getElementById("colorPicker");
-  colorPicker.addEventListener("input", updateColor, false);
-  colorPicker.addEventListener("change", updateColor, false);
+  colorPicker.addEventListener("input", updateColorValue, false);
+  colorPicker.addEventListener("change", updateColorValue, false);
+  console.log(color);
   //currentFigure = undefined;
 }
 
-function updateColor(event) {
+function updateColorValue(event) {
   color = event.target.value;
 }
 ///////////////////////////////////////////
@@ -122,7 +123,7 @@ function checkInsidePoint() {
   figures.forEach((figure) => {
     if (figure.pointInFigure(mouseClickPosition) === true) {
       figure.colorSetter(color);
-      clearContex(); //проблем при контекста
+      clearContex();
       redrawsFigures();
     }
   });
@@ -134,7 +135,9 @@ function draw() {
 }
 
 function redrawsFigures() {
-  figures.forEach((figure) => figure.draw());
+  figures.forEach((figure) => {
+    figure.draw(ctx);
+  });
 }
 //////////////////////////////////////////////////
 

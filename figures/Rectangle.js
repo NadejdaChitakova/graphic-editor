@@ -33,7 +33,6 @@ class Rectangle extends Figure {
     }
     return false;
   }
-  delete() {}
 
   ///////////////////////////////////
 
