@@ -18,79 +18,18 @@ const CANVAS_STATE = {
 
 let currentButtonState = CANVAS_STATE.NONE;
 
-<<<<<<< HEAD
-function checkInsidePoint() {
-  console.log(figures);
-  figures.forEach((figure) =>
-    console.log(figure.pointInFigure(mouseClickPosition));
-    if(figure.pointInFigure(mouseClickPosition) === true){
-
-    }
-  );
-}
-
-function getColor() {
-  getMousePosition();
-  checkInsidePoint();
-}
-
-function getColorValue() {
-  let colorPicker = document.getElementById("colorPicker");
-  colorPicker.addEventListener("input", updateFirst, false);
-  colorPicker.addEventListener("change", updateColor, false);
-  //canvasElement.addEventListener("click", checkInsidePoint, false);
-}
-
-function updateFirst(event) {
-  //get new color value
-  color = event.target.value;
-}
-function updateColor(event) {
-  color = event.target.value;
-  console.log(color);
-}
-=======
 /////////////////////////////////
 //initial function, initializes the context
->>>>>>> corrections
 
 function onInit() {
   canvasElement = document.getElementById("canvasElement");
   ctx = canvasElement.getContext("2d");
 
-<<<<<<< HEAD
-  //addEventListeners();
-}
-
-function getMousePosition() {
-  canvasElement.addEventListener("click", (event) => {
-    mouseClickPosition = new Point(event.offsetX, event.offsetY);
-    console.log(mouseClickPosition);
-  });
-}
-function addEventListeners() {
-  canvasElement.addEventListener("click", checkInsidePoint, false);
-  canvasElement.addEventListener("mousedown", (event) => {
-    this.mouseClicked = true;
-    startPoint = new Point(event.offsetX, event.offsetY);
-  });
-  canvasElement.addEventListener("mouseup", (event) => {
-    this.mouseClicked = false;
-    endPoint = new Point(event.offsetX, event.offsetY);
-    pushFigureOnArr();
-    draw();
-  });
-=======
   addEventListeners();
->>>>>>> corrections
 }
 //////////////////////////////////////////////
 
-<<<<<<< HEAD
-function changeState(id) {
-=======
 function setButtonState(id) {
->>>>>>> corrections
   switch (id) {
     case "rectangle":
       currentButtonState = CANVAS_STATE.RECTANGLE;
@@ -108,18 +47,6 @@ function setButtonState(id) {
       break;
   }
 }
-<<<<<<< HEAD
-function pushFigureOnArr() {
-  switch (currentButtonState) {
-    case "RECTANGLE":
-      figures.push(new Rectangle(startPoint, endPoint));
-      break;
-    case "TRIANGLE":
-      figures.push(new Triangle(startPoint, endPoint));
-      break;
-  }
-}
-=======
 
 function createFigure() {
   switch (currentButtonState) {
@@ -141,6 +68,7 @@ function addEventListeners() {
   canvasElement.addEventListener("mouseup", mouseUp);
 
   canvasElement.addEventListener("mousemove", mouseMove);
+  canvasElement.addEventListener("click", mouseClick);
 }
 
 ////////////////////////////////////////////
@@ -148,10 +76,6 @@ function addEventListeners() {
 function mouseDown(event) {
   mouseClicked = true;
   startPoint = new Point(event.offsetX, event.offsetY);
-  mouseClickPosition = new Point(event.offsetX, event.offsetY);
-  if (color && mouseClickPosition) {
-    checkInsidePoint();
-  }
 }
 
 function mouseMove(event) {
@@ -176,15 +100,20 @@ function mouseUp(event) {
   }
   console.log(figures);
 }
-
+function mouseClick(event) {
+  mouseClickPosition = new Point(event.offsetX, event.offsetY);
+  if (color && mouseClickPosition) {
+    console.log("mouse click");
+    checkInsidePoint();
+  }
+}
 ////////////////////////////////////////////
 
 function getColorValue() {
   let colorPicker = document.getElementById("colorPicker");
   colorPicker.addEventListener("input", updateColorValue, false);
   colorPicker.addEventListener("change", updateColorValue, false);
-  console.log(color);
-  //currentFigure = undefined;
+  currentFigure = undefined;
 }
 
 function updateColorValue(event) {
@@ -199,9 +128,9 @@ function checkInsidePoint() {
       clearContex();
       redrawsFigures();
     }
+    console.log(figure.pointInFigure(mouseClickPosition));
   });
 }
->>>>>>> corrections
 
 //////////////////////////////////////////////////
 function draw() {

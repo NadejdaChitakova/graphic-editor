@@ -11,13 +11,13 @@ class Rectangle extends Figure {
   }
   draw(ctx) {
     ctx.beginPath();
+    ctx.strokeStyle = this.color;
     ctx.strokeRect(
       this.startPoint.x,
       this.startPoint.y,
       this.getWidth(),
       this.getHeight()
     );
-    ctx.fill();
 
     ctx.closePath();
   }
