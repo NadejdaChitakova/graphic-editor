@@ -3,26 +3,11 @@
   <head>
     <title>Wellcome</title>
     <script type="text/javascript" src="script.js"></script>
-    <script
-      type="text/javascript"
-      src="C:\Users\Nadejda\Desktop\CanvasProject\figures\Figure.js"
-    ></script>
-    <script
-      type="text/javascript"
-      src="C:\Users\Nadejda\Desktop\CanvasProject\figures\Point.js"
-    ></script>
-    <script
-      type="text/javascript"
-      src="C:\Users\Nadejda\Desktop\CanvasProject\figures\Rectangle.js"
-    ></script>
-    <script
-      type="text/javascript"
-      src="C:\Users\Nadejda\Desktop\CanvasProject\figures\Triangle.js"
-    ></script>
-    <script
-      type="text/javascript"
-      src="C:\Users\Nadejda\Desktop\CanvasProject\figures\Circle.js"
-    ></script>
+    <script type="text/javascript" src="figures/Figure.js"></script>
+    <script type="text/javascript" src="figures/Point.js"></script>
+    <script type="text/javascript" src="figures/Rectangle.js"></script>
+    <script type="text/javascript" src="figures/Triangle.js"></script>
+    <script type="text/javascript" src="figures/Circle.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <!-- Bootstrap CSS -->
@@ -42,21 +27,28 @@
       >hi</canvas
     >
 
+<<<<<<< HEAD
     <button id="rectangle" onclick="changeState(this.id)">Rectangle</button>
 
     <button id="triangle" onclick="changeState(this.id)">Тriangle</button>
+=======
+    <button id="rectangle" onclick="setButtonState(this.id)">Rectangle</button>
+>>>>>>> corrections
 
-    <button onclick="addEventListeners(3);">Circle</button>
+    <button id="triangle" onclick="setButtonState(this.id)">Тriangle</button>
 
-    <button onclick="drawStar()">Star</button>
     <input
       type="color"
       id="colorPicker"
       name="head"
-      onclick="getColorValue()"
+      onclick="setButtonState(this.id)"
     />
+<<<<<<< HEAD
     <button id="clear" onclick="changeState(this.id)">Clear Canvas</button>
     <button></button>
+=======
+    <button id="clear" onclick="setButtonState(this.id)">Clear Canvas</button>
+>>>>>>> corrections
 
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"

@@ -6,6 +6,9 @@ class Rectangle extends Figure {
     width = this.getWidth();
     height = this.getHeight();
   }
+  colorSetter(newColor) {
+    this.color = newColor;
+  }
   draw(ctx) {
     ctx.beginPath();
     ctx.strokeRect(

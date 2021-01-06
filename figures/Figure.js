@@ -4,6 +4,8 @@ class Figure {
     this.endPoint = endPoint;
     this.color = color;
   }
+  colorSetter() {}
+  delete() {}
   draw() {}
   pointInFigure() {}
 }
