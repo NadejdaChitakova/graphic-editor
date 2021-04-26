@@ -2,10 +2,11 @@ let canvasElement, ctx;
 let startPoint = undefined;
 let endPoint = undefined;
 let mouseClicked = false;
-let mouseClickPosition = undefined;
 let figures = [];
 let color;
 let currentFigure = undefined;
+let selectedFigure = undefined;
+
 
 const CANVAS_STATE = {
   NONE: "NONE",
@@ -14,12 +15,13 @@ const CANVAS_STATE = {
   CIRLCE: "CIRCLE",
   CLEAR: "CLEAR",
   COLOR: "COLOR",
+  SELECTED: "SELECTED"
 };
 
-let currentButtonState = CANVAS_STATE.NONE;
+let ButtonState = CANVAS_STATE.NONE;
 
-/////////////////////////////////
 //initial function, initializes the context
+//------------------------------------------
 
 function onInit() {
   canvasElement = document.getElementById("canvasElement");
@@ -27,65 +29,96 @@ function onInit() {
 
   addEventListeners();
 }
-//////////////////////////////////////////////
+//------------------------------------------
 
 function setButtonState(id) {
   switch (id) {
     case "rectangle":
-      currentButtonState = CANVAS_STATE.RECTANGLE;
+      ButtonState = CANVAS_STATE.RECTANGLE;
       break;
     case "triangle":
-      currentButtonState = CANVAS_STATE.TRIANGLE;
+      ButtonState = CANVAS_STATE.TRIANGLE;
       break;
     case "clear":
-      currentButtonState = CANVAS_STATE.CLEAR;
+      ButtonState = CANVAS_STATE.CLEAR;
       clearCanvas();
       break;
     case "colorPicker":
-      currentButtonState = CANVAS_STATE.COLOR;
+      ButtonState = CANVAS_STATE.COLOR;
       getColorValue();
+      break;
+    case "selectFigure":
+      currentFigure = undefined;
+      ButtonState = CANVAS_STATE.SELECTED;
+      break;
+      default :
+      ButtonState = CANVAS_STATE.NONE;
       break;
   }
 }
 
 function createFigure() {
-  switch (currentButtonState) {
+  switch (ButtonState) {
     case "RECTANGLE":
-      currentFigure = new Rectangle(startPoint, endPoint);
+      currentFigure = new Rectangle(startPoint, endPoint, ctx);
       break;
     case "TRIANGLE":
-      currentFigure = new Triangle(startPoint, endPoint);
+      currentFigure = new Triangle(startPoint, endPoint, ctx);
       break;
   }
 }
 
-////////////////////////////////////////////
+//-------------------------------------------
 // event listeners
 
 function addEventListeners() {
+
   canvasElement.addEventListener("mousedown", mouseDown);
 
   canvasElement.addEventListener("mouseup", mouseUp);
 
   canvasElement.addEventListener("mousemove", mouseMove);
-  canvasElement.addEventListener("click", mouseClick);
+
+  canvasElement.addEventListener("click",mouseClick);
+
 }
 
-////////////////////////////////////////////
+//------------------------------------------
 //functions related with eventListeners
+
 function mouseDown(event) {
   mouseClicked = true;
   startPoint = new Point(event.offsetX, event.offsetY);
+  var figure = getIntersectedFigure();
+
+  if (ButtonState === CANVAS_STATE.SELECTED) {//? da se iznesyt
+    unselectAllFigure();
+    currentFigure = undefined;
+    selectedFigure = undefined;
+    selectFigure();
+
+  }
+
+  if (ButtonState === CANVAS_STATE.SELECTED && figure === false) {
+    unselectAllFigure();
+  }
 }
 
 function mouseMove(event) {
   if (mouseClicked === true) {
+    
     endPoint = new Point(event.offsetX, event.offsetY);
-    clearContex();
-    if (figures.length > 0) {
-      redrawsFigures();
+    if(!currentFigure) {
+      createFigure();
     }
-    createFigure();
+    else {
+      currentFigure.setEndPoint(endPoint)
+    }
+    clearContext();
+    if (figures.length > 0) {
+      redrawFigures();
+    }
+
     if (currentFigure != undefined) {
       draw();
     }
@@ -93,64 +126,106 @@ function mouseMove(event) {
 }
 
 function mouseUp(event) {
+
   mouseClicked = false;
-  endPoint = new Point(event.offsetX, event.offsetY);
+
   if (currentFigure != undefined) {
+
     figures.push(currentFigure);
-  }
-  console.log(figures);
-}
-function mouseClick(event) {
-  mouseClickPosition = new Point(event.offsetX, event.offsetY);
-  if (color && mouseClickPosition) {
-    console.log("mouse click");
-    checkInsidePoint();
+    currentFigure = undefined;
+    redrawFigures()
   }
 }
-////////////////////////////////////////////
+
+function mouseClick(){
+  if (ButtonState === CANVAS_STATE.COLOR) {
+    console.log("in mouse click");
+    getIntersectedFigure();
+    colorsFigure();
+}}
+
+//--------------------------------------
+//Get color from input
 
 function getColorValue() {
   let colorPicker = document.getElementById("colorPicker");
-  colorPicker.addEventListener("input", updateColorValue, false);
+
   colorPicker.addEventListener("change", updateColorValue, false);
   currentFigure = undefined;
 }
 
 function updateColorValue(event) {
+  console.log("update color", event.target.value)
   color = event.target.value;
 }
-///////////////////////////////////////////
-//
-function checkInsidePoint() {
+//--------------------------------------
+//method from select and check point in figure
+
+
+function colorsFigure(){
+  console.log(color)
+  selectedFigure.setColor(color);
+  redrawFigures();
+}
+
+
+function getIntersectedFigure(){//и
+  let isIntersect = false;
   figures.forEach((figure) => {
-    if (figure.pointInFigure(mouseClickPosition) === true) {
-      figure.colorSetter(color);
-      clearContex();
-      redrawsFigures();
+    if (figure.pointInFigure(startPoint) === true) {
+      selectedFigure = figure;
+      isIntersect = true;
     }
-    console.log(figure.pointInFigure(mouseClickPosition));
   });
+  return isIntersect;
 }
 
-//////////////////////////////////////////////////
+function selectFigure() {
+  let isIntersect = getIntersectedFigure();
+
+  if (isIntersect== true) {
+    
+    selectedFigure.setIsSelected(true);
+    redrawFigures();
+
+  }
+}
+
+function unSelectFigure(figure){
+  if (selectedFigure === true) {
+    
+    figure.setIsSelected(false);
+
+  }
+}
+function unselectAllFigure(){
+  figures.forEach((figure) => figure.setIsSelected(false));
+}
+
+//--------------------------------------------
+//draw methods
 function draw() {
-  currentFigure.draw(ctx);
+  currentFigure.draw();
 }
 
-function redrawsFigures() {
+function redrawFigures() {
+  clearContext();
   figures.forEach((figure) => {
     figure.draw(ctx);
   });
-}
-//////////////////////////////////////////////////
 
+
+}
+
+//----------------------------------------------
 //clear methods
-function clearContex() {
+function clearContext() {
   ctx.clearRect(0, 0, canvasElement.width, canvasElement.height);
 }
+
 function clearCanvas() {
   figures = [];
   ctx.clearRect(0, 0, canvasElement.width, canvasElement.height);
-  currentButtonState = CANVAS_STATE.NONE;
+  ButtonState = CANVAS_STATE.NONE;
   currentFigure = undefined;
 }
