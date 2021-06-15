@@ -1,0 +1,4 @@
+25/02 
+ - move the logic into canvas.js
+ - script.js should handle the change of the state and send the mouse events to canvas
+ - script.js should handle the color change and send it to canvas.
